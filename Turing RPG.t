@@ -1,11 +1,12 @@
 %  Turing RPG
 %  By: meshif
 %  v00.00.01 - November 24, 2025 - new project
-%  v00.00.02 - December 5, 2025 - added arrow navigation
-%  v00.00.03 - December 5, 2025 - added new tiles and flower randomgen
-%  v00.00.04 - December 9, 2025 - added starting castle and new castle tiles
-%                               - added tile constants
-%                               - renumbered town tiles
+%  v00.00.02 - December 5, 2025  - added arrow navigation
+%  v00.00.03 - December 5, 2025  - added new tiles and flower randomgen
+%  v00.00.04 - December 9, 2025  - added starting castle and new castle tiles
+%                                - added tile constants
+%                                - renumbered town tiles
+%                                - broke github and had to recreate the repo
 
 View.Set ("graphics:640;640,nobuttonbar,offscreenonly")
 
