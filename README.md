@@ -1,5 +1,1 @@
-Simple RPG game made in Turing.
-
-
-
-Turing is available at http://compsci.ca/holtsoft/
+Simple RPG game with a procedurally generated world. Written in [Turing](http://compsci.ca/holtsoft/)
