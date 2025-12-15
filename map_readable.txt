@@ -1,4 +1,16 @@
-First 12 chars of map indicate exit points
+This is a human readable version of the map tile used by the game. It also
+includes detailed info about the map format
+
+Bytes 000-001 - Map type
+      002-025 - Exit points
+      026-227 - Sprite number
+
+Map Types:
+00 - Dev/test only
+01 - Castle
+10 - Wilderness
+
+Exit Points:
     00  01  02
     |   |   |
 03--+-------+--04
@@ -9,9 +21,11 @@ First 12 chars of map indicate exit points
     |   |   |
     09  10  11
 
+001 - Castle
 031-057 - Main Town
 
 000 - Blank
+001 - Castle 1
 031 - North
 032 - East
 033 - South
