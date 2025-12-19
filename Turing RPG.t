@@ -14,6 +14,8 @@
 %                                 renamed to spritesheet.bmp
 %                               - got movement and redrawing working but need
 %                                 to clean up that bit
+% v00.00.06 - December 15, 2025 - made flowers collectable
+%                               - reorganized things in movement/mapgen
 
 const DEVMODE : boolean := true
 const SCREEN_X : int := 640
@@ -29,7 +31,6 @@ const FIRST_TOWN_MAP : int := 31
 const LAST_TOWN_MAP : int := 57
 const FLOWER_SPRITE_1 : int := 18
 const PLAYER_SPRITE : int := 99
-const OLD_SPRITE : int := 89
 
 var tmpCount : int := 0
 var spriteFile : int
@@ -37,10 +38,13 @@ var mapFile : int
 var mapType : int
 var previousMap, currentMap : int
 var playerX, playerY : int := 320
+var playerTile : int
 var inputKey : string (1)
 var mapData : string
 var sprite : array 0 .. 99 of int
 var mapExit : array 1 .. MAP_EXITS of int
+var mouseX, mouseY, mouseBtn, mouseColor : int
+var playerFlowers : int := 0
 
 % Open required files
 spriteFile := Pic.FileNew ("spritesheet.bmp")
@@ -85,44 +89,62 @@ procedure DrawMap (mapIndex : int)
     View.Update
 end DrawMap
 
-% Draw map tile as it was before player was there, copy map tile player is about
-% to step onto, and then draw player in new location
+% Redraw map where player was then draw player in new location
 procedure MovePlayer (x, y : int)
-    Pic.Draw (sprite (OLD_SPRITE), playerX, playerY, picMerge)
-    playerX += STEP_SIZE * x
-    playerY += STEP_SIZE * y
-    sprite (OLD_SPRITE) := Pic.New (playerX, playerY, playerX + SPRITE_SIZE, playerY + SPRITE_SIZE)
+    if View.WhatDotColor (playerX + 22, playerY + 20) = 43 then
+	playerFlowers += 1
+    end if
+    playerTile := round (playerX / SPRITE_SIZE * 2 + (SCREEN_Y - playerY - SPRITE_SIZE) / SPRITE_SIZE * 10 * 2)
+    seek : mapFile, MAP_LEN * currentMap + MAP_HEADER_LEN + playerTile
+    get : mapFile, mapData : 2
+    Pic.Draw (sprite (strint (mapData)), playerX, playerY, picCopy)
+    if x = 1 and playerX + SPRITE_SIZE < maxx then
+	playerX += STEP_SIZE
+    elsif x = -1 and playerX > 0 then
+	playerX -= STEP_SIZE
+    elsif y = 1 and playerY + SPRITE_SIZE < maxy then
+	playerY += STEP_SIZE
+    elsif y = -1 and playerY > 0 then
+	playerY -= STEP_SIZE
+    end if
     Pic.Draw (sprite (PLAYER_SPRITE), playerX, playerY, picMerge)
 end MovePlayer
 
 % Draw inital map and player
 currentMap := CASTLE_MAP
 DrawMap (currentMap)
-sprite (OLD_SPRITE) := Pic.New (playerX, playerY, playerX + SPRITE_SIZE, playerY + SPRITE_SIZE)
 MovePlayer (0, 0)
 
+% Main game loop
 loop
     if hasch then
 	getch (inputKey)
 	exit when inputKey = KEY_ESC
-	if inputKey = KEY_LEFT_ARROW and playerX > 0 then
-	    MovePlayer (-1, 0)
-	elsif inputKey = KEY_RIGHT_ARROW and playerX + SPRITE_SIZE < maxx then
-	    MovePlayer (1, 0)
-	elsif inputKey = KEY_UP_ARROW and playerY + SPRITE_SIZE < maxy then
-	    MovePlayer (0, 1)
-	elsif inputKey = KEY_DOWN_ARROW and playerY > 0 then
-	    MovePlayer (0, -1)
-	end if
+	case inputKey of
+	    label KEY_LEFT_ARROW :
+		MovePlayer (-1, 0)
+	    label KEY_RIGHT_ARROW :
+		MovePlayer (1, 0)
+	    label KEY_UP_ARROW :
+		MovePlayer (0, 1)
+	    label KEY_DOWN_ARROW :
+		MovePlayer (0, -1)
+	    label :
+	end case
     end if
     if DEVMODE then
+	mousewhere (mouseX, mouseY, mouseBtn)
+	mouseColor := View.WhatDotColor (mouseX, mouseY)
+	locate (1, maxcol - 11)
+	color (mouseColor)
+	put intstr (mouseX) + "," + intstr (mouseY) + "," + intstr (mouseColor) : 11 ..
+	color (black)
 	locate (1, 1)
 	put intstr (playerX) + "," + intstr (playerY) : 7 ..
 	locate (2, 1)
 	put realstr (playerX / SPRITE_SIZE, 0) + "," + realstr ((SCREEN_Y - playerY - 64) / SPRITE_SIZE, 0) : 7 ..
 	locate (3, 1)
-	var temp : real := playerX / SPRITE_SIZE * 2 + (SCREEN_Y - playerY - 64) / SPRITE_SIZE * 10 * 2
-	var playerTile : int := round (temp)
+	playerTile := round (playerX / SPRITE_SIZE * 2 + (SCREEN_Y - playerY - 64) / SPRITE_SIZE * 10 * 2)
 	put intstr (playerTile) : 7 ..
 	locate (4, 1)
 	put intstr (MAP_LEN * currentMap + MAP_HEADER_LEN + playerTile) : 7 ..
@@ -131,6 +153,8 @@ loop
 	Pic.Draw (sprite (strint (mapData)), 0, 0, picCopy)
 	Draw.Line (0, 64, 64, 64, black)
 	Draw.Line (64, 0, 64, 64, black)
+	locate (5, 1)
+	put intstr (playerFlowers) : 2 ..
     end if
     View.Update
 end loop
