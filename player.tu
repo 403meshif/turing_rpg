@@ -17,9 +17,9 @@ procedure DrawPlayer ()
 	put intstr (tile (player.tile).collectible) : 7 ..
 	locate (5, 1)
 	put intstr ((maxx - SPRITE_SIZE) - player.x) + "," + intstr ((maxy - SPRITE_SIZE) - player.y) : 7 ..
-	locate (maxrow, 1)
-	put "Flowers: " + intstr (player.flowers) : 9 ..
     end if
+    locate (maxrow, 1)
+    put "Flowers: " + intstr (player.flowers) : 9 ..
     View.Update
     return
 end DrawPlayer
