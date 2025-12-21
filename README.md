@@ -1,9 +1,14 @@
 # Tuing RPG
 
 1.0 - Introduction
+
 2.0 - Map Format
+
 3.0 - Todo
+
 4.0 - Ideas once I get through the Todo stuff
+
+9.0 Download Turing and get started programming
 
 ### 1.0 - Introduction
 This is my version of a simple RPG game with a procedurally generated world. This Readme file is currently as incomplete as the game itself is, and I'm just using it to keep track of random info related to the game and my ideas/progress.
@@ -36,3 +41,6 @@ Exit points are labeled from the top left to the bottom right. Below is a digram
 ###3.0 Todo
 
 ###4.0 Ideas once I get through the Todo stuff
+
+9.0 Download Turing and get started programming
+Turing is available for free from [Compsci.ca](http://compsci.ca/holtsoft). This was originally a programming language developed by Ric Holt and partners from the University of Toronto, mainly to be used in computer science courses in Ontario classrooms. Despite being a basic beginner language, Turing can be used for more advanced programs.
