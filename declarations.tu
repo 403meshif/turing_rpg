@@ -4,6 +4,7 @@ type tileType :
 	collectible : int
 	monster : int
 	walkable : boolean
+	isExit : boolean
     end record
 
 type playerType :
@@ -23,7 +24,11 @@ type mouseType :
 	color : int
     end record
 
+forward procedure DrawPlayer ()
+forward procedure MovePlayer (xDir : int, yDir : int)
+
 const DEBUG : boolean := true
+const MAP_OR_PLAYER : string := "player"
 const SCREEN_X : int := 640
 const SCREEN_Y : int := 640
 const SPRITE_SIZE : int := 64
@@ -35,6 +40,7 @@ const SPRITESHEET_SIZE : int := 640
 const STEP_SIZE : int := 64
 const FLOWER_SPRITE : int := 18
 const PLAYER_SPRITE : int := 99
+const CASTLE_MAP : int := 21
 
 var spriteFile : int
 var tempCount : int
@@ -42,6 +48,7 @@ var mapFile : int
 var previousMap : int
 var currentMap : int
 var nextMap : int
+var mapEntry : int
 var inputKey : string (1)
 var mapData : string (2)
 var mapType : int
@@ -54,7 +61,7 @@ var mapExit : array 1 .. 12 of boolean
 var tile : array 0 .. 99 of tileType
 
 tempCount := 0
-currentMap := 1
+currentMap := CASTLE_MAP
 player.x := 4 * STEP_SIZE
 player.y := 5 * STEP_SIZE
 player.flowers := 0

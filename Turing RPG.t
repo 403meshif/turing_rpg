@@ -1,5 +1,8 @@
 % Turing RPG
 % By: meshif
+% v00.00.00 - December 21, 2025 - these version numbers don't match the Github
+%                                 release versions. Sometimes I'll add quite a
+%                                 few things before I compile a new version
 % v00.00.01 - November 24, 2025 - new project
 % v00.00.02 - December 05, 2025 - added arrow navigation
 % v00.00.03 - December 05, 2025 - added new tiles and flower randomgen
@@ -20,11 +23,19 @@
 %                               - split code into files depending on function
 %                               - added mouse support
 %                               - added non-walkable tiles
+% v00.00.11 - December 29, 2025 - added ability to move from one map to the
+%                                 next
+%                               - moved map layout, etc info to new map help
+%                                 file
+%                               - working on animated player sprites for each
+%                                 direction
+%                               - happy birthday Patti
 
 include "declarations.tu"
 include "sprites.tu"
 include "map.tu"
 include "player.tu"
+include "movemap.tu"
 
 if DEBUG then
     View.Set ("graphics:640;640,position:center;truemiddle")
@@ -36,6 +47,7 @@ LoadSprites ()
 
 open : mapFile, "map", get, seek
 
+ScanMap(currentMap)
 DrawMap (currentMap)
 DrawPlayer ()
 
@@ -43,17 +55,31 @@ loop
     if hasch then
 	getch (inputKey)
 	exit when inputKey = KEY_ESC
-	case inputKey of
-	    label KEY_RIGHT_ARROW :
-		MovePlayer (1, 0)
-	    label KEY_LEFT_ARROW :
-		MovePlayer (-1, 0)
-	    label KEY_UP_ARROW :
-		MovePlayer (0, 1)
-	    label KEY_DOWN_ARROW :
-		MovePlayer (0, -1)
-	    label :
-	end case
+	if MAP_OR_PLAYER = "player" then
+	    case inputKey of
+		label KEY_RIGHT_ARROW :
+		    MovePlayer (1, 0)
+		label KEY_LEFT_ARROW :
+		    MovePlayer (-1, 0)
+		label KEY_UP_ARROW :
+		    MovePlayer (0, 1)
+		label KEY_DOWN_ARROW :
+		    MovePlayer (0, -1)
+		label :
+	    end case
+	else
+	    case inputKey of
+		label KEY_RIGHT_ARROW :
+		    MoveMap (1, 0)
+		label KEY_LEFT_ARROW :
+		    MoveMap (-1, 0)
+		label KEY_UP_ARROW :
+		    MoveMap (0, 1)
+		label KEY_DOWN_ARROW :
+		    MoveMap (0, -1)
+		label :
+	    end case
+	end if
     end if
     mousewhere (mouse.x, mouse.y, mouse.button)
     mouse.color := View.WhatDotColor (mouse.x, mouse.y)

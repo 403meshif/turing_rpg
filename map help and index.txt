@@ -1,0 +1,57 @@
+This is a human readable version of the map tile used by the game. It also
+includes detailed info about the map format and general game stuff
+
+Bytes 000-001 - Map type
+      002-025 - Exit points
+      026-227 - Sprite number
+
+Map Types:
+00 - Dev/test only
+01 - Castle
+10 - Wilderness
+
+Exit Points:
+    01  02  03
+    |   |   |
+04--+-------+--05
+    |       |
+06--|       |--07
+    |       |
+08--+-------+--09
+    |   |   |
+    10  11  12
+
+000-020 - Dev Mapd
+001 - Castle
+031-057 - Main Town
+
+000 - Blank
+001 - Numbered Tiles
+021 - Castle 1
+031 - North
+032 - East
+033 - South
+034 - West
+035 - East to West
+036 - North to South
+037 - Crossroads
+038 - North T
+039 - East T
+040 - South T
+041 - West T
+042 - NW L
+043 - NE L
+044 - SE L
+045 - SW L
+046 - NW L center X
+047 - NE L center X
+048 - SE L center X
+049 - SW L center X
+050 - NW L center Y
+051 - NE L center Y
+052 - SE L center Y
+053 - SW L center Y
+054 - NW L center
+055 - NE L center
+056 - SE L center
+057 - SW L center
